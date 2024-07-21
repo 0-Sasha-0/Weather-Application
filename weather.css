@@ -1,26 +1,82 @@
-<!DOCTYPE html>
-<html lang="en">
+/* styles.css */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #eef1f7;
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
 
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Weather App</title>
-    <link rel="stylesheet" href="styles.css">
-  </head>
+.weather-container {
+    width: 100%;
+    max-width: 600px;
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    text-align: center;
+}
 
-  <body>
-  <div id="weather-app" class="weather-container">
-    <!-- All your weather-related elements go here -->
+input[type="text"] {
+    width: 70%;
+    padding: 10px;
+    margin-right: 10px;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+}
 
-      <h1>Weather Finder</h1>
-      <p>Enter the name of a city to get the current weather:</p>
-      <form id="weatherForm">
-        <input type="text" id="cityInput" placeholder="Enter city name" required>
-        <button type="submit">Get Weather</button>
-      </form>
-      <div id="weatherDisplay"></div>
-    </div>
-    <script src="app.js"></script>
-  </body>
+button {
+    transition: background-color 0.3s, transform 0.2s;
+}
 
-</html>
+button:hover {
+    background-color: #0056b3;
+}
+
+button:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.5);
+}
+
+button:active {
+    transform: scale(0.98);
+}
+
+#weatherDisplay {
+    margin-top: 20px;
+    padding: 20px;
+    background-color: #f2f2f2;
+    border-radius: 4px;
+}
+
+@media (max-width: 768px) {
+    .weather-container {
+        width: 90%;
+        padding: 15px;
+    }
+
+    input[type="text"], button {
+        width: 100%;
+        margin-top: 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    h1 {
+        font-size: 1.5rem;
+    }
+}
+
+@keyframes rain {
+    to {
+        background-position: 100% 100%;
+    }
+}
+
+.weather-container.rain {
+    background: url('rain-animation.jpg') repeat 0 0;
+    animation: rain 10s linear infinite;
+}
