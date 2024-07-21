@@ -1,31 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+
+  <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Weather App</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-    <div class="weather-app-container">
-        <header>
-            <h1>Weather Dashboard</h1>
-        </header>
-        <div class="search-container">
-            <input type="text" placeholder="Enter city name" id="search-input">
-            <button id="search-button">Search</button>
-        </div>
-        <div class="weather-info">
-            <h2 id="city-name"></h2>
-            <div class="temperature">
-                <span id="temp-value">--</span><span id="temp-unit">°C</span>
-            </div>
-            <div class="details">
-                <p id="weather-description"></p>
-                <p>Humidity: <span id="humidity">--</span>%</p>
-                <p>Wind Speed: <span id="wind-speed">--</span> km/h</p>
-            </div>
-        </div>
+    <link rel="stylesheet" href="weather.css">
+  </head>
+
+  <body>
+    <div class="container">
+      <h1>Weather Finder</h1>
+      <p>Enter the name of a city to get the current weather:</p>
+      <form id="weatherForm">
+        <input type="text" id="cityInput" placeholder="Enter city name" required>
+        <button type="submit">Get Weather</button>
+      </form>
+      <div id="weatherDisplay"></div>
     </div>
-</body>
+    <script src="weather.js"></script>
+  </body>
+
 </html>
