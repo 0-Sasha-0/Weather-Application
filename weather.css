@@ -1,65 +1,43 @@
-/* styles.css */
 body {
-    font-family: 'Arial', sans-serif;
-    background-color: #e3f2fd;
-    color: #424242;
-    margin: 0;
-    padding: 20px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
+  color: #333;
+  text-align: center;
+  padding: 20px;
 }
 
-.weather-app-container {
-    width: 350px;
-    background-color: white;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    border-radius: 10px;
-    overflow: hidden;
-}
-
-header {
-    background-color: #42a5f5;
-    color: white;
-    padding: 20px;
-    text-align: center;
-    font-size: 24px;
-}
-
-.search-container {
-    padding: 20px;
-    display: flex;
-    justify-content: space-between;
+.container {
+  width: 90%;
+  margin: auto;
+  background: white;
+  padding: 20px;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
 }
 
 input[type="text"] {
-    width: 70%;
-    padding: 10px;
-    border: 2px solid #42a5f5;
-    border-radius: 5px;
+  width: 80%;
+  padding: 10px;
+  margin-top: 20px;
+  border: 1px solid #ddd;
 }
 
 button {
-    background-color: #42a5f5;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    cursor: pointer;
-    border-radius: 5px;
+  width: 18%;
+  padding: 10px;
+  background: #007BFF;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
 }
 
-.weather-info {
-    padding: 20px;
-    text-align: center;
+button:hover {
+  background: #0056b3;
 }
 
-.temperature {
-    font-size: 48px;
-    font-weight: bold;
-    margin: 10px 0;
-}
-
-.details p {
-    margin: 5px 0;
+#weatherDisplay {
+  margin-top: 20px;
+  padding: 20px;
+  background-color: #e9ecef;
+  border-radius: 5px;
 }
