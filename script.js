@@ -23,7 +23,7 @@ async function getWeather(city) {
       }
       throw new Error('An error occurred while fetching weather data');
     }
-    
+
     const data = await response.json();
     console.log('Weather Data:', data); // Log weather data for debugging
     cache.set(city, data); // Cache the response
@@ -38,12 +38,12 @@ document.getElementById('weatherForm').addEventListener('submit', async (e) => {
   e.preventDefault();
   const city = document.getElementById('cityInput').value.trim();
   const resultDiv = document.getElementById('weatherResult');
-  
+
   // Clear previous content and reset styles
   resultDiv.innerHTML = '';
   resultDiv.classList.add('hidden');
   resultDiv.classList.remove('error');
-  
+
   if (city === "") {
     resultDiv.innerHTML = '<p>Please enter a city name.</p>';
     resultDiv.classList.add('error');
@@ -73,7 +73,7 @@ document.getElementById('weatherForm').addEventListener('submit', async (e) => {
     resultDiv.innerHTML = `<p>${error.message}</p>`;
     resultDiv.classList.add('error');
   } finally {
-    // Remove loader and make sure to not throw an error if it's already removed
+    // Remove loader if it exists
     if (resultDiv.contains(loader)) {
       resultDiv.removeChild(loader);
     }
