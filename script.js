@@ -1,4 +1,4 @@
-const apiKey = '7120cd0cfa1e8dbfaf1812078bdb106c'; // Replace with your actual OpenWeatherMap API key
+const apiKey = '7120cd0cfa1e8dbfaf1812078bdb106c'; // Your OpenWeatherMap API key
 const apiUrl = 'https://api.openweathermap.org/data/2.5/weather';
 const cache = new Map(); // Simple in-memory cache
 
@@ -52,6 +52,9 @@ document.getElementById('weatherForm').addEventListener('submit', async (e) => {
     resultDiv.innerHTML = `
       <h2>${weather.name}, ${weather.sys.country}</h2>
       <p>Temperature: ${weather.main.temp}°C</p>
+      <p>Feels Like: ${weather.main.feels_like}°C</p>
+      <p>Min Temp: ${weather.main.temp_min}°C</p>
+      <p>Max Temp: ${weather.main.temp_max}°C</p>
       <p>Humidity: ${weather.main.humidity}%</p>
       <p>Wind Speed: ${weather.wind.speed} m/s</p>
       <p>Conditions: ${weather.weather[0].description}</p>
