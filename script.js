@@ -1,5 +1,4 @@
-// Use environment variable for API key
-const apiKey = process.env.REACT_APP_API_KEY; 
+const apiKey = process.env.REACT_APP_API_KEY; // Access API key from environment variables
 const apiUrl = 'https://api.openweathermap.org/data/2.5/weather';
 const cache = new Map(); // Simple in-memory cache
 
