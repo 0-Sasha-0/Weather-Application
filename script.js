@@ -1,4 +1,4 @@
-const apiKey = '4483e37273f4a4bb51b3f9d7249b74c6'; // Your OpenWeatherMap API key
+const apiKey = '9598ab201cd04171bd1145314241907'; // Your OpenWeatherMap API key
 const apiUrl = 'https://api.openweathermap.org/data/2.5/weather';
 const cache = new Map(); // Simple in-memory cache
 
