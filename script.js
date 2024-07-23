@@ -1,5 +1,5 @@
-const apiKey = '9598ab201cd04171bd1145314241907'; // Your OpenWeatherMap API key
-const apiUrl = 'https://api.openweathermap.org/data/2.5/weather';
+const apiKey = 'your_weatherapi_key'; // Replace with your WeatherAPI key
+const apiUrl = 'https://api.weatherapi.com/v1/current.json';
 const cache = new Map(); // Simple in-memory cache
 
 async function getWeather(city) {
@@ -8,7 +8,7 @@ async function getWeather(city) {
   }
 
   try {
-    const url = `${apiUrl}?q=${city}&appid=${apiKey}&units=metric`;
+    const url = `${apiUrl}?key=${apiKey}&q=${city}`;
     console.log('Request URL:', url); // Log request URL for debugging
 
     const response = await fetch(url);
@@ -17,8 +17,8 @@ async function getWeather(city) {
     const data = await response.json();
     console.log('Response Data:', data); // Log response data
 
-    if (data.cod !== 200) {
-      throw new Error(data.message || 'An error occurred while fetching weather data');
+    if (data.error) {
+      throw new Error(data.error.message || 'An error occurred while fetching weather data');
     }
 
     cache.set(city, data); // Cache the response
@@ -48,14 +48,12 @@ document.getElementById('weatherForm').addEventListener('submit', async (e) => {
   try {
     const weather = await getWeather(city);
     resultDiv.innerHTML = `
-      <h2>${weather.name}, ${weather.sys.country}</h2>
-      <p>Temperature: ${weather.main.temp}°C</p>
-      <p>Feels Like: ${weather.main.feels_like}°C</p>
-      <p>Min Temp: ${weather.main.temp_min}°C</p>
-      <p>Max Temp: ${weather.main.temp_max}°C</p>
-      <p>Humidity: ${weather.main.humidity}%</p>
-      <p>Wind Speed: ${weather.wind.speed} m/s</p>
-      <p>Conditions: ${weather.weather[0].description}</p>
+      <h2>${weather.location.name}, ${weather.location.country}</h2>
+      <p>Temperature: ${weather.current.temp_c}°C</p>
+      <p>Feels Like: ${weather.current.feelslike_c}°C</p>
+      <p>Humidity: ${weather.current.humidity}%</p>
+      <p>Wind Speed: ${weather.current.wind_kph} kph</p>
+      <p>Conditions: ${weather.current.condition.text}</p>
     `;
     resultDiv.classList.remove('error');
   } catch (error) {
