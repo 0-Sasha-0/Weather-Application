@@ -6,6 +6,7 @@ body {
   height: 100vh;
   margin: 0;
   background: #f0f0f0;
+  color: #333; /* Default text color */
 }
 
 .container {
@@ -35,6 +36,10 @@ input {
 
 input:focus, button:focus {
   outline: 2px solid #007bff;
+}
+
+input:focus-visible, button:focus-visible {
+  outline: 3px solid #0056b3; /* More visible outline for keyboard navigation */
 }
 
 button {
@@ -103,4 +108,26 @@ button:hover {
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
+}
+
+/* Dark mode styles */
+@media (prefers-color-scheme: dark) {
+  body {
+    background: #333;
+    color: #fff;
+  }
+
+  .container {
+    background: #222;
+    color: #ccc;
+  }
+
+  button {
+    background-color: #555;
+    color: #ddd;
+  }
+
+  button:hover {
+    background-color: #777;
+  }
 }
