@@ -14,17 +14,13 @@ async function getWeather(city) {
     const response = await fetch(url);
     console.log('Response Status:', response.status); // Log response status
 
-    if (!response.ok) {
-      if (response.status === 401) {
-        throw new Error('Invalid API key. Please check your API key.');
-      }
-      if (response.status === 404) {
-        throw new Error('City not found');
-      }
-      throw new Error('An error occurred while fetching weather data');
-    }
-    
     const data = await response.json();
+    console.log('Response Data:', data); // Log response data
+
+    if (data.cod !== 200) {
+      throw new Error(data.message || 'An error occurred while fetching weather data');
+    }
+
     cache.set(city, data); // Cache the response
     return data;
   } catch (error) {
