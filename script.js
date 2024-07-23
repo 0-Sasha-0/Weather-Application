@@ -38,12 +38,12 @@ document.getElementById('weatherForm').addEventListener('submit', async (e) => {
   e.preventDefault();
   const city = document.getElementById('cityInput').value.trim();
   const resultDiv = document.getElementById('weatherResult');
-  const loader = document.createElement('div');
-  loader.className = 'loading';
-  resultDiv.innerHTML = ''; // Clear previous content
+  
+  // Clear previous content and reset styles
+  resultDiv.innerHTML = '';
+  resultDiv.classList.add('hidden');
   resultDiv.classList.remove('error');
-  resultDiv.classList.remove('hidden');
-
+  
   if (city === "") {
     resultDiv.innerHTML = '<p>Please enter a city name.</p>';
     resultDiv.classList.add('error');
@@ -51,7 +51,10 @@ document.getElementById('weatherForm').addEventListener('submit', async (e) => {
     return;
   }
 
-  resultDiv.appendChild(loader); // Show loading spinner
+  // Create and append loading spinner
+  const loader = document.createElement('div');
+  loader.className = 'loading';
+  resultDiv.appendChild(loader);
 
   try {
     const weather = await getWeather(city);
@@ -70,7 +73,10 @@ document.getElementById('weatherForm').addEventListener('submit', async (e) => {
     resultDiv.innerHTML = `<p>${error.message}</p>`;
     resultDiv.classList.add('error');
   } finally {
+    // Remove loader and make sure to not throw an error if it's already removed
+    if (resultDiv.contains(loader)) {
+      resultDiv.removeChild(loader);
+    }
     resultDiv.classList.remove('hidden');
-    resultDiv.removeChild(loader); // Remove loading spinner
   }
 });
