@@ -9,7 +9,10 @@ async function getWeather(city) {
   }
 
   try {
-    const response = await fetch(`${apiUrl}?q=${city}&appid=${apiKey}&units=metric`);
+    const url = `${apiUrl}?q=${city}&appid=${apiKey}&units=metric`;
+    console.log('Request URL:', url); // Log request URL for debugging
+
+    const response = await fetch(url);
     
     if (!response.ok) {
       if (response.status === 401) {
@@ -25,8 +28,8 @@ async function getWeather(city) {
     cache.set(city, data); // Cache the response
     return data;
   } catch (error) {
-    console.error('Fetch Error:', error);
-    throw error; // Rethrow error to be caught in event listener
+    console.error('Fetch Error:', error); // Log errors for debugging
+    throw error; // Rethrow to be caught in the event listener
   }
 }
 
