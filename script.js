@@ -23,9 +23,8 @@ async function getWeather(city) {
       }
       throw new Error('An error occurred while fetching weather data');
     }
-
+    
     const data = await response.json();
-    console.log('Weather Data:', data); // Log weather data for debugging
     cache.set(city, data); // Cache the response
     return data;
   } catch (error) {
@@ -38,11 +37,10 @@ document.getElementById('weatherForm').addEventListener('submit', async (e) => {
   e.preventDefault();
   const city = document.getElementById('cityInput').value.trim();
   const resultDiv = document.getElementById('weatherResult');
-
-  // Clear previous content and reset styles
-  resultDiv.innerHTML = '';
+  
   resultDiv.classList.add('hidden');
   resultDiv.classList.remove('error');
+  resultDiv.innerHTML = 'Loading...';
 
   if (city === "") {
     resultDiv.innerHTML = '<p>Please enter a city name.</p>';
@@ -50,11 +48,6 @@ document.getElementById('weatherForm').addEventListener('submit', async (e) => {
     resultDiv.classList.remove('hidden');
     return;
   }
-
-  // Create and append loading spinner
-  const loader = document.createElement('div');
-  loader.className = 'loading';
-  resultDiv.appendChild(loader);
 
   try {
     const weather = await getWeather(city);
@@ -72,11 +65,6 @@ document.getElementById('weatherForm').addEventListener('submit', async (e) => {
   } catch (error) {
     resultDiv.innerHTML = `<p>${error.message}</p>`;
     resultDiv.classList.add('error');
-  } finally {
-    // Remove loader if it exists
-    if (resultDiv.contains(loader)) {
-      resultDiv.removeChild(loader);
-    }
-    resultDiv.classList.remove('hidden');
   }
+  resultDiv.classList.remove('hidden');
 });
