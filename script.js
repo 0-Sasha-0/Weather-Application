@@ -12,7 +12,8 @@ async function getWeather(city) {
     console.log('Request URL:', url); // Log request URL for debugging
 
     const response = await fetch(url);
-    
+    console.log('Response Status:', response.status); // Log response status
+
     if (!response.ok) {
       if (response.status === 401) {
         throw new Error('Invalid API key. Please check your API key.');
@@ -24,6 +25,7 @@ async function getWeather(city) {
     }
     
     const data = await response.json();
+    console.log('Weather Data:', data); // Log weather data for debugging
     cache.set(city, data); // Cache the response
     return data;
   } catch (error) {
@@ -36,9 +38,11 @@ document.getElementById('weatherForm').addEventListener('submit', async (e) => {
   e.preventDefault();
   const city = document.getElementById('cityInput').value.trim();
   const resultDiv = document.getElementById('weatherResult');
-  resultDiv.classList.add('hidden');
-  resultDiv.innerHTML = 'Loading...';
+  const loader = document.createElement('div');
+  loader.className = 'loading';
+  resultDiv.innerHTML = ''; // Clear previous content
   resultDiv.classList.remove('error');
+  resultDiv.classList.remove('hidden');
 
   if (city === "") {
     resultDiv.innerHTML = '<p>Please enter a city name.</p>';
@@ -46,6 +50,8 @@ document.getElementById('weatherForm').addEventListener('submit', async (e) => {
     resultDiv.classList.remove('hidden');
     return;
   }
+
+  resultDiv.appendChild(loader); // Show loading spinner
 
   try {
     const weather = await getWeather(city);
@@ -63,6 +69,8 @@ document.getElementById('weatherForm').addEventListener('submit', async (e) => {
   } catch (error) {
     resultDiv.innerHTML = `<p>${error.message}</p>`;
     resultDiv.classList.add('error');
+  } finally {
+    resultDiv.classList.remove('hidden');
+    resultDiv.removeChild(loader); // Remove loading spinner
   }
-  resultDiv.classList.remove('hidden');
 });
