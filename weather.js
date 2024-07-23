@@ -1,52 +1,54 @@
-async function fetchWeather(cityInput) {
-    const display = document.getElementById('weatherDisplay');
-    display.innerHTML = '<p>Loading weather data...</p>';
-    const apiKey = '9598ab201cd04171bd1145314241907'; // Consider securing your API key
-    const url = `https://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${cityInput}`;
+const apiKey = '03c7d9b3d4a3fd74ffa6898bca0862c7'; // Replace with your OpenWeatherMap API key
+const apiUrl = 'https://api.openweathermap.org/data/2.5/weather';
+const cache = new Map(); // Simple in-memory cache
 
-    try {
-        const response = await fetch(url);
-        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-        const data = await response.json();
-        if (data.error) throw new Error(data.error.message);
-        displayWeather(data);
-        updateWeatherStyles(data.current.condition.text);
-    } catch (error) {
-        console.error('Error:', error);
-        display.innerHTML = `Error: ${error.message}`;
+async function getWeather(city) {
+  if (cache.has(city)) {
+    return cache.get(city); // Return cached response if available
+  }
+
+  try {
+    const response = await fetch(`${apiUrl}?q=${city}&appid=${apiKey}&units=metric`);
+    if (!response.ok) {
+      throw new Error('City not found');
     }
+    const data = await response.json();
+    cache.set(city, data); // Cache the response
+    return data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
 }
 
+document.getElementById('weatherForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const city = document.getElementById('cityInput').value.trim();
+  const resultDiv = document.getElementById('weatherResult');
+  resultDiv.classList.add('hidden');
+  resultDiv.innerHTML = 'Loading...';
+  resultDiv.classList.remove('error');
 
-document.getElementById('weatherForm').addEventListener('submit', function(event) {
-    event.preventDefault();
-    const cityInput = document.getElementById('cityInput').value;
-    fetchWeather(cityInput);
+  if (city === "") {
+    resultDiv.innerHTML = '<p>Please enter a city name.</p>';
+    resultDiv.classList.add('error');
+    resultDiv.classList.remove('hidden');
+    return;
+  }
+
+  try {
+    const weather = await getWeather(city);
+    resultDiv.innerHTML = `
+      <h2>${weather.name}, ${weather.sys.country}</h2>
+      <p>Temperature: ${weather.main.temp}°C</p>
+      <p>Humidity: ${weather.main.humidity}%</p>
+      <p>Wind Speed: ${weather.wind.speed} m/s</p>
+      <p>Conditions: ${weather.weather[0].description}</p>
+    `;
+    resultDiv.classList.remove('error');
+  } catch (error) {
+    resultDiv.innerHTML = '<p>Unable to retrieve weather data. Please try again.</p>';
+    resultDiv.classList.add('error');
+  }
+  resultDiv.classList.remove('hidden');
 });
-
-function updateWeatherStyles(weatherCondition) {
-    const weatherApp = document.getElementById('weather-app');
-    const body = document.body;
-    const styles = {
-        'Clear': { backgroundImage: 'url(images/clear-sky.jpg)', textColor: '#f7c576', bgColor: '#e2f0cb' },
-        'Clouds': { backgroundImage: 'url(images/cloudy.jpg)', textColor: '#d9d9d9', bgColor: '#b6b6b6' },
-        'Rain': { backgroundImage: 'url(images/rain.jpg)', textColor: '#a4b0be', bgColor: '#6c757d' },
-        'Snow': { backgroundImage: 'url(images/snow.jpg)', textColor: '#ffffff', bgColor: '#aaa' },
-        'default': { backgroundImage: 'url(images/default.jpg)', textColor: '#333333', bgColor: '#eef1f7' }
-    };
-    const { backgroundImage, textColor, bgColor } = styles[weatherCondition] || styles['default'];
-    weatherApp.style.backgroundImage = backgroundImage;
-    weatherApp.style.color = textColor;
-    body.style.backgroundColor = bgColor;
-}
-
-function displayWeather(data) {
-    const weather = data.current;
-    const display = document.getElementById('weatherDisplay');
-    display.innerHTML = `<h3>Weather in ${data.location.name}</h3>
-                         <p>Temperature: ${weather.temp_c}°C (${weather.temp_f}°F)</p>
-                         <p>Condition: ${weather.condition.text}</p>
-                         <img src="${weather.condition.icon}" alt="Weather icon showing ${weather.condition.text}">
-                         <p>Humidity: ${weather.humidity}%</p>
-                         <p>Wind: ${weather.wind_kph} km/h (${weather.wind_mph} mph)</p>`;
-}
