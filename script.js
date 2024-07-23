@@ -1,4 +1,4 @@
-const apiKey = '03c7d9b3d4a3fd74ffa6898bca0862c7'; // Replace with your OpenWeatherMap API key
+const apiKey = process.env.REACT_APP_API_KEY; // Use environment variable for API key
 const apiUrl = 'https://api.openweathermap.org/data/2.5/weather';
 const cache = new Map(); // Simple in-memory cache
 
@@ -10,13 +10,16 @@ async function getWeather(city) {
   try {
     const response = await fetch(`${apiUrl}?q=${city}&appid=${apiKey}&units=metric`);
     if (!response.ok) {
-      throw new Error('City not found');
+      if (response.status === 404) {
+        throw new Error('City not found');
+      }
+      throw new Error('An error occurred while fetching weather data');
     }
     const data = await response.json();
     cache.set(city, data); // Cache the response
     return data;
   } catch (error) {
-    console.error(error);
+    console.error('Fetch Error:', error);
     throw error;
   }
 }
