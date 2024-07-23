@@ -1,10 +1,32 @@
 const apiKey = '9598ab201cd04171bd1145314241907'; // Replace with your WeatherAPI key
 const apiUrl = 'https://api.weatherapi.com/v1/current.json';
 const cache = new Map(); // Simple in-memory cache
+const CACHE_DURATION = 30 * 60 * 1000; // Cache duration in milliseconds, e.g., 30 minutes
+
+function setCache(city, data) {
+  const cacheEntry = {
+    data: data,
+    expiry: Date.now() + CACHE_DURATION
+  };
+  cache.set(city, cacheEntry);
+}
+
+function getCache(city) {
+  const cacheEntry = cache.get(city);
+  if (!cacheEntry) return null;
+
+  if (Date.now() > cacheEntry.expiry) {
+    cache.delete(city);
+    return null;
+  }
+
+  return cacheEntry.data;
+}
 
 async function getWeather(city) {
-  if (cache.has(city)) {
-    return cache.get(city); // Return cached response if available
+  const cachedData = getCache(city);
+  if (cachedData) {
+    return cachedData; // Return cached data if not expired
   }
 
   try {
@@ -21,7 +43,7 @@ async function getWeather(city) {
       throw new Error(data.error.message || 'An error occurred while fetching weather data');
     }
 
-    cache.set(city, data); // Cache the response
+    setCache(city, data); // Cache the new data
     return data;
   } catch (error) {
     console.error('Fetch Error:', error); // Log errors for debugging
