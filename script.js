@@ -1,4 +1,5 @@
-const apiKey = process.env.REACT_APP_API_KEY; // Use environment variable for API key
+// Use environment variable for API key
+const apiKey = process.env.REACT_APP_API_KEY; 
 const apiUrl = 'https://api.openweathermap.org/data/2.5/weather';
 const cache = new Map(); // Simple in-memory cache
 
@@ -9,18 +10,23 @@ async function getWeather(city) {
 
   try {
     const response = await fetch(`${apiUrl}?q=${city}&appid=${apiKey}&units=metric`);
+    
     if (!response.ok) {
+      if (response.status === 401) {
+        throw new Error('Invalid API key. Please check your API key.');
+      }
       if (response.status === 404) {
         throw new Error('City not found');
       }
       throw new Error('An error occurred while fetching weather data');
     }
+    
     const data = await response.json();
     cache.set(city, data); // Cache the response
     return data;
   } catch (error) {
     console.error('Fetch Error:', error);
-    throw error;
+    throw error; // Rethrow error to be caught in event listener
   }
 }
 
@@ -50,7 +56,7 @@ document.getElementById('weatherForm').addEventListener('submit', async (e) => {
     `;
     resultDiv.classList.remove('error');
   } catch (error) {
-    resultDiv.innerHTML = '<p>Unable to retrieve weather data. Please try again.</p>';
+    resultDiv.innerHTML = `<p>${error.message}</p>`;
     resultDiv.classList.add('error');
   }
   resultDiv.classList.remove('hidden');
